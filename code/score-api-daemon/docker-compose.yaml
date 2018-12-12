@@ -1,0 +1,12 @@
+version: '2.0'
+
+services:
+
+  scoresApi:
+    image: scores-api:1.0
+    container_name: "scoresApi"
+    build:
+      context: .
+    ports:
+    - 8090:8090
+    restart: always
