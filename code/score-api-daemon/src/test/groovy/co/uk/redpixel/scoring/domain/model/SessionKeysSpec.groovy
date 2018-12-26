@@ -47,7 +47,7 @@ class SessionKeysSpec extends Specification {
         SessionKeys.getInstance().generate() | _
     }
 
-    def 'should expiry'() {
+    def 'should expire'() {
         given: 'system keys'
         def keys = SessionKeys.getInstance()
 
