@@ -4,10 +4,8 @@ import co.uk.redpixel.scoring.core.http.Header
 import org.apache.http.client.methods.HttpGet
 import org.apache.http.client.methods.HttpPost
 import org.apache.http.entity.StringEntity
-import org.apache.http.impl.auth.BasicScheme
 import org.apache.http.impl.client.CloseableHttpClient
 import org.apache.http.impl.client.HttpClients
-import org.apache.http.message.BasicHeader
 import org.apache.http.util.EntityUtils
 import org.testcontainers.containers.GenericContainer
 import org.testcontainers.spock.Testcontainers
@@ -49,9 +47,10 @@ class ScoresApiSpec extends BaseSpec {
         SCORES.every {
             final user = it.key
             final score = it.value
+            final body = score as String
 
             def request = new HttpPost(baseUrl(container).concat(POST_SCORES.value(LEVEL, user)))
-            request.setEntity new StringEntity(score as String, Charset.forName('UTF-8'))
+            request.setEntity new StringEntity(body, Charset.forName('UTF-8'))
             request.addHeader(Header.AUTHORIZATION.getKey(), sessionKey)
 
             def response = client.execute request
@@ -61,7 +60,7 @@ class ScoresApiSpec extends BaseSpec {
 
     def 'lists highest scores for a level'() {
         given:
-        final expected = String.join(',', SCORES.entrySet().join(':'))
+        final expected = SCORES.entrySet().collect { "${it.key}:${it.value}" }.join(',')
 
         when:
         def response = client.execute new HttpGet(baseUrl(container).concat(GET_SCORES.value(LEVEL)))

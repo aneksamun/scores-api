@@ -8,6 +8,7 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.TreeMap;
 
 import static co.uk.redpixel.scoring.core.http.Header.CONTENT_LENGTH;
 import static java.util.Collections.unmodifiableMap;
@@ -45,7 +46,7 @@ public final class HttpRequest {
         val version = firstLine[2];
 
         int index = 1;
-        val headers = new HashMap<String, String>();
+        val headers = new TreeMap<String, String>(String.CASE_INSENSITIVE_ORDER);
 
         for (; index < lines.length; index++) {
             if (lines[index].isEmpty()) {
