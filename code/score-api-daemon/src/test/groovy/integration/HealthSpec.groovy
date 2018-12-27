@@ -12,17 +12,17 @@ class HealthSpec extends BaseSpec {
     @Shared
     GenericContainer container = newScoresApiContainer()
 
-    def 'should establish connection with service' () {
-        setup:
+    def 'should connect service' () {
+        setup: 'prerequisites'
         def client = HttpClients.createDefault()
 
-        when:
+        when: 'requesting index page'
         def response = client.execute new HttpGet(baseUrl(container))
 
-        then:
+        then: 'succeeds'
         response.getStatusLine().statusCode == 200
 
-        cleanup:
+        cleanup: 'resources'
         client.close()
     }
 }
