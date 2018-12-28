@@ -32,18 +32,18 @@ class ScoresApiSpec extends BaseSpec {
     CloseableHttpClient client = HttpClients.createDefault()
 
     def 'creates a new session key for user'() {
-        when:
+        when: 'sending request to obtain session key'
         def response = client.execute new HttpPost(baseUrl(container).concat(LOGIN.value()))
 
-        and:
+        and: 'parsing key from request'
         sessionKey = EntityUtils.toString response.entity
 
-        then:
+        then: 'the key is valid sequence of characters'
         sessionKey?.trim()
     }
 
     def 'posts user scores to a level'() {
-        expect:
+        expect: 'scores to be posted'
         SCORES.every {
             final user = it.key
             final score = it.value
@@ -51,7 +51,7 @@ class ScoresApiSpec extends BaseSpec {
 
             def request = new HttpPost(baseUrl(container).concat(POST_SCORES.value(LEVEL, user)))
             request.setEntity new StringEntity(body, Charset.forName('UTF-8'))
-            request.addHeader(Header.AUTHORIZATION.getKey(), sessionKey)
+            request.addHeader Header.AUTHORIZATION.getKey(), sessionKey
 
             def response = client.execute request
             response.statusLine.statusCode == 200
@@ -59,16 +59,16 @@ class ScoresApiSpec extends BaseSpec {
     }
 
     def 'lists highest scores for a level'() {
-        given:
+        given: 'expectations'
         final expected = SCORES.entrySet().collect { "${it.key}:${it.value}" }.join(',')
 
-        when:
+        when: 'requesting highest scores for level'
         def response = client.execute new HttpGet(baseUrl(container).concat(GET_SCORES.value(LEVEL)))
 
-        then:
+        then: 'request succeeds'
         response.statusLine.statusCode == 200
 
-        and:
+        and: 'response matches expectations'
         def actual = EntityUtils.toString response.entity
         actual == expected
     }
