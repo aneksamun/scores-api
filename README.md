@@ -6,11 +6,11 @@ The system is built from scratch using sockets and Java NIO Non-blocking API to 
 
 ## Endpoints
 
-| Path                         | Method | Response    | Details                                                                                                                                         |
-| ---------------------------- | ------ | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| /login                       | POST   | 200         | Generates new session key for user to authenticate. The key is valid for 10 minutes.                                                            |
-| /levels/{level}/users/{name} | POST   | 200/401/400 | Posts a user's score to a level. Requires session key to be present in `Authorization` header. Similar the score should be present in the body. |
-| /levels/{level}/scores       | GET    | 200         | Returns a high score list for a level.                                                                                                          |
+| Path                         | Method | Response    | Details                                                                                                                                          |
+| ---------------------------- | ------ | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| /login                       | POST   | 200         | Generates a new session key to authenticate an user. The key is valid for 10 minutes.                                                            |
+| /levels/{level}/users/{name} | POST   | 200/401/400 | Posts a user's score to a level. Requires session key to be included in `Authorization` header. Similar the score should be present in the body. |
+| /levels/{level}/scores       | GET    | 200         | Returns a high score list for a level.                                                                                                           |
 
 ## Build and run instructions
 
